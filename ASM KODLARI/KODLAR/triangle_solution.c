@@ -1,0 +1,43 @@
+datasg SEGMENT PARA 'veri'
+a DB 12
+b DB 17
+c DB 12
+tip DB ?
+datasg ends
+
+stacksg SEGMENT PARA STACK 'yigin'
+DW 12 DUP(?)
+stacksg ENDS
+
+codesg SEGMENT PARA 'kod'
+ASSUME CS:codesg,DS:datasg,SS:stacksg
+
+ANA PROC FAR
+PUSH DS
+XOR AX,AX
+PUSH AX
+MOV AX,DATASG
+MOV DS,AX
+
+	MOV AL,A
+	MOV BL,B
+	MOV CL,C
+	CMP AL,BL
+	JE J1
+	CMP AL,CL
+	JE J2
+	CMP BL,CL
+	JE J2
+	MOV TIP,3
+	JMP SON
+J1:	CMP AL,CL
+	JNE J2
+	MOV TIP,1
+	JMP SON
+J2:	MOV TIP,2
+	
+	
+	SON RETF
+	ANA ENDP
+	CODESG ENDS
+	END ANA
